@@ -2,7 +2,17 @@
 	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [{
+	"pages": [
+		{
+		    "path" : "pages/upload/upload",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
 			"path": "pages/index/index",
 			"name": "index",
 			"title": "首页",
@@ -283,19 +293,7 @@
 				"auth": true
 
 			}
-		}, {
-			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
-			"name": "u-avatar-cropper",
-			"title": "头像裁剪",
-			"style": {
-				"navigationBarTitleText": "头像裁剪",
-				"navigationBarBackgroundColor": "#000000"
-			},
-			"meta": {
-				"auth": false
-
-			}
-		},
+		}, 
 		{
 			"path": "pages/publish/channel",
 			"name": "channel",
@@ -502,15 +500,23 @@
 			}
 
 		}
-	    ,{
-            "path" : "pages/upload/upload",
+	 
+        ,{
+            "path" : "pages/upphoto/upphoto",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+			"style": {
+				"navigationBarTitleText": "裁剪",
+				"navigationBarBackgroundColor": "#000000"
+			}
+		}
     ],
 	// #ifdef APP-PLUS
 	"tabBar": {

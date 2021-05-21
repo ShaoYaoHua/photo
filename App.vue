@@ -66,6 +66,8 @@ export default {
 
 <style lang="scss">
 @import 'uview-ui/index.scss';
+@import "colorui/main.css";
+@import "colorui/icon.css";
 /*每个页面公共css */
 .u-bg-white {
 	background-color: #ffffff;
