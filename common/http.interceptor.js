@@ -25,7 +25,8 @@ let noLoginUrl = [
 	'/addons/cms/api.comment/index',
 	'/addons/vip/api.index/index',
 	'/addons/cms/api.diyform/formList',
-	'/addons/cms/api.diyform/show'
+	'/addons/cms/api.diyform/show',
+	'/addons/cms/api.my/tikorder'
 ];
 
 //设置session_id
