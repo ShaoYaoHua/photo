@@ -1,6 +1,5 @@
 //免登录接口
 let noLoginUrl = [
-	'/addons/cms/api.common/init',
 	'/addons/cms/api.ems/send',
 	'/addons/cms/api.sms/send',
 	'/addons/cms/api.archives/index',
@@ -26,7 +25,8 @@ let noLoginUrl = [
 	'/addons/vip/api.index/index',
 	'/addons/cms/api.diyform/formList',
 	'/addons/cms/api.diyform/show',
-	'/addons/cms/api.my/tikorder'
+	'/addons/cms/api.my/tikorder',
+	'/addons/cms/api.my/guige'
 ];
 
 //设置session_id
@@ -63,7 +63,7 @@ const install = (Vue, vm) => {
 			url = arr[0];
 		}		
 		if (noLoginUrl.indexOf(url) == -1 && !vm.vuex_token) {
-			vm.$u.route('/pages/login/mobilelogin');
+			vm.$u.route('/pages/login/wxlogin');
 			return false;
 		}
 		config.header.token = vm.vuex_token;

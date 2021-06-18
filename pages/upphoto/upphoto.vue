@@ -1,7 +1,7 @@
 <template>
-	<u-form :model="form" ref="uForm" >
+	<u-form :model="form" ref="uForm">
 		<u-form-item label="尺寸" label-width="230">
-			<u-input :disabled="true" v-model="form.chi" />
+			<u-input :disabled="true" v-model="form.chicunname" />
 		</u-form-item>
 		<u-form-item label="需要上传照片数" label-width="230">
 			<u-input :disabled="true" v-model="form.nums" />
@@ -18,7 +18,7 @@
 					图片上传
 				</view>
 				<view class="action">
-					{{imgList.length}}/4
+					{{imgList.length}}/{{form.nums}}
 				</view>
 			</view>
 			<view style="color: rgb(144, 147, 153);">宫格类请按照顺序上传，设计按照顺序排版</view>
@@ -31,12 +31,14 @@
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
-					<view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
+					<view class="solids" @tap="ChooseImage" v-if="imgList.length<form.nums">
 						<text class='cuIcon-cameraadd'></text>
 					</view>
 				</view>
 			</view>
 		</view>
+		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false" :width="form.newbili[0]*1"
+			:heght="form.newbili[1]*1" :is-lock-width="true" />
 
 		<!-- 	<view >
 			<view style="display: flex;justify-content: space-between;margin: 10px 0px;">
@@ -50,12 +52,23 @@
 
 		</view> -->
 
-		<u-button @click="submit">提交</u-button>
+		<u-button style="margin: 15px;" type="primary" @click="submit">提交</u-button>
 	</u-form>
 </template>
 
 <script>
+	import lClipper from '@/components/lime-clipper/'
 	export default {
+
+		onLoad(e) {
+			let query = this.$Route.query || e || {};
+			this.postform.orderid = query.orderid || 0;
+			this.postform.chichu = query.chichu || '';
+			this.getDetail();
+		},
+		components: {
+			lClipper
+		},
 		data() {
 			return {
 				form: {
@@ -65,47 +78,94 @@
 					bili: '2500*2600'
 				},
 				imgList: [],
+				show: false,
+				url: '',
+				postform: {
+					orderid: "",
+					chichu: "",
+					imglist: []
+				}
 			};
 		},
 		created() {
-			// 监听从裁剪页发布的事件，获得裁剪结果
-			uni.$on('uAvatarCropper', path => {
-				debugger
-				//this.avatar = path;
-				if (this.imgList.length != 0) {
-					this.imgList = this.imgList.concat([path])
-				} else {
-					this.imgList =[path] 
-				}
-				
-				// 可以在此上传到服务端
-				// uni.uploadFile({
-				// 	url: 'http://www.example.com/upload',
-				// 	filePath: path,
-				// 	name: 'file',
-				// 	complete: (res) => {
-				// 		console.log(res);
-				// 	}
-				// });
-			})
+
 		},
 		methods: {
-
-			ChooseImage() {
-
-				this.$u.route({
-					// 关于此路径，请见下方"注意事项"
-					url: '/uview-ui/components/u-avatar-cropper/u-avatar-cropper',
-					// 内部已设置以下默认参数值，可不传这些参数
-					params: {
-						// 输出图片宽度，高等于宽，单位px
-						destWidth: 300,
-						// 裁剪框宽度，高等于宽，单位px
-						rectWidth: 200,
-						// 输出的图片类型，如果'png'类型发现裁剪的图片太大，改成"jpg"即可
-						fileType: 'jpg',
+			submit() {
+				if(this.imgList.length!=this.form.nums)
+				{
+					this.$u.toast("图片请上传完整");
+					return fasel;
+					
+				}
+				
+				
+				this.postform.imglist = this.imgList;
+				var orderid=this.postform.orderid;
+				this.$api.PostTikOrder(this.postform).then(res => {
+					this.$u.toast(res.msg);
+					if (res.code) {
+						setTimeout(() => {
+							this.$Router.replace({
+								path: `/pages/upload/upload`,
+								query: {
+									orderid: orderid
+								}
+							});
+						}, 1500);
 					}
-				})
+				});
+
+			},
+			getDetail: async function() {
+				let res = await this.$api.getGuigei({
+					guige: this.postform.chichu,
+					shop_order_id: this.postform.orderid
+				});
+				console.log(res);
+				if (!res.code) {
+					this.$u.toast(res.msg);
+					return;
+				} else {
+					this.form = res.data
+					if(res.data.imglist!="")
+					{
+						this.imgList=res.data.imglist;
+					}
+				}
+			},
+			readysuccess:async function(res) {
+				console.log(res);
+				},
+			choosesuccess: async function(res) {
+				let img = await this.$api.goUpload({
+					filePath: res.url
+				});
+				if (!img.code) {
+					this.$u.toast(res.msg);
+				};
+				if (this.imgList.length != 0) {
+					this.imgList = this.imgList.concat([img.data.fullurl])
+				} else {
+					this.imgList = [img.data.fullurl]
+				}
+				this.show = false;
+			},
+			ChooseImage() {
+				this.show = true;
+				// this.$u.route({
+				// 	// 关于此路径，请见下方"注意事项"
+				// 	url: '/uview-ui/components/u-avatar-cropper/u-avatar-cropper',
+				// 	// 内部已设置以下默认参数值，可不传这些参数
+				// 	params: {
+				// 		// 输出图片宽度，高等于宽，单位px
+				// 		destWidth: 300,
+				// 		// 裁剪框宽度，高等于宽，单位px
+				// 		rectWidth: 200,
+				// 		// 输出的图片类型，如果'png'类型发现裁剪的图片太大，改成"jpg"即可
+				// 		fileType: 'jpg',
+				// 	}
+				// })
 
 
 				// uni.chooseImage({
@@ -148,8 +208,9 @@
 	page {
 		background-color: #FFFFFF;
 	}
+
 	.u-form-item {
-	    margin: 0 20px;
-		    padding: 4px 0px !important;
+		margin: 0 20px;
+		padding: 4px 0px !important;
 	}
 </style>

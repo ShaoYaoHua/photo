@@ -17,23 +17,37 @@
 		<view style="margin: 0px 20px;10px;20px">填写订单编号后，点击获取，自动加载订单信息哦,注：付款后5分钟才可以点击获取</view>
 
 		<view style="display: flex;flex-wrap: wrap;text-align: center;    margin-top: 20px;">
-			<view style="width: 49%;    margin: 10px 0px;">
-				<u-tag text="莫妮白色-长款-冲印 1张" type="error" @click="gophoto" />
+			
+			<view  v-if="item.name=='尺寸'" style="width: 49%;margin: 10px 0px;" v-for="(item, index) in form.sku_spec">
+				<u-tag :text="item.value" type="error" @click="gophoto(item.value)" />
 			</view>
-			<view style="width: 49%;    margin: 10px 0px;">
-				<u-tag text="莫妮白色-长款-冲印 1张" type="error"@click="gophoto" />
-			</view>
-			<view style="width: 49%;    margin: 10px 0px;">
-				<u-tag text="莫妮白色-长款-冲印 6张" type="error"@click="gophoto" />
-			</view>
+		
+		
 		</view>
 	</u-form>
 </template>
 
 <script>
 	export default {
+		onLoad: async function(e) {
+			let query = this.$Route.query || e || {};
+			this.mainorderid = query.orderid || 0;
+			if(this.mainorderid!=0)
+			{
+				let res = await this.$api.getTikOrder({ orderid:this.mainorderid });
+				if (!res.code) {
+					this.$u.toast(res.msg);
+					return;
+				}else{
+					this.form=res.data
+				}
+			}
+			
+			
+		},
 		data() {
 			return {
+				mainorderid:"",
 				form: {
 					shop_order_id: '',
 					intro: '',
@@ -51,15 +65,18 @@
 					this.$u.toast(res.msg);
 					return;
 				}else{
-					debugger
 					this.form=res.data
 				}
 				
 			},
+			
+			
+			
 			gophoto(id) {
+				var orderid=this.form.shop_order_id;
 				this.$Router.push({
-					path: '/pages/upphoto/upphoto',
-					query: { id: 1 }
+					path: `/pages/upphoto/upphoto`,
+					query: { orderid: orderid,chichu:id }
 				});
 			},
 			

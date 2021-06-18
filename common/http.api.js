@@ -87,7 +87,8 @@ const install = (Vue, vm) => {
 	vm.$api.getMyComment 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/comment', params);
 	vm.$api.getMyboutus 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/aboutus', params);
 	vm.$api.getTikOrder 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/tikorder', params);
-	
+	vm.$api.getGuigei 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/guige', params);
+	vm.$api.PostTikOrder 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/posttikOrder', params);
 	
 	vm.$api.getOrder 	 	  = async (params = {}) => await vm.$u.get('/addons/cms/api.my/order', params);
 	vm.$api.getMyagree 	      = async (params = {}) => await vm.$u.get('/addons/cms/api.my/agreement', params);
