@@ -117,11 +117,14 @@ export default {
 			if (res.data.user) {
 				this.$u.vuex('vuex_token', res.data.user.token);
 				this.success(this.index);
+				this.$Router.push({ path: '/pages/upload/upload', query: {  } });
 				return;
 			}
 			this.$u.vuex('vuex_third', res.data.third);
+			this.$Router.push({ path: '/pages/upload/upload', query: {  } });
+		
 			//授权成功到登录或绑定页面
-			this.$Router.push({ path: '/pages/login/register', query: { bind: 'bind' } });
+			//this.$Router.push({ path: '/pages/login/register', query: { bind: 'bind' } });
 		},
 		// #ifdef MP-ALIPAY
 		getALICode() {

@@ -118,6 +118,8 @@
 
 			},
 			getDetail: async function() {
+				
+					var orderid=this.postform.orderid;
 				let res = await this.$api.getGuigei({
 					guige: this.postform.chichu,
 					shop_order_id: this.postform.orderid
@@ -125,6 +127,14 @@
 				console.log(res);
 				if (!res.code) {
 					this.$u.toast(res.msg);
+				setTimeout(() => {
+					this.$Router.replace({
+						path: `/pages/upload/upload`,
+						query: {
+							orderid: orderid
+						}
+					});
+				}, 1500);
 					return;
 				} else {
 					this.form = res.data
