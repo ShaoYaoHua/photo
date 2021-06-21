@@ -52,7 +52,7 @@
 
 		</view> -->
 
-		<u-button style="margin: 15px;" type="primary" @click="submit">提交</u-button>
+		<u-button style="margin: 15px;"  v-if="form.shenhestatus==1||form.shenhestatus==''||form.shenhestatus==0" type="primary" @click="submit">提交</u-button>
 	</u-form>
 </template>
 
@@ -75,7 +75,8 @@
 					chi: '莫妮白色',
 					nums: 12,
 					yaoqiu: '150kb',
-					bili: '2500*2600'
+					bili: '2500*2600',
+					shenhestatus:''
 				},
 				imgList: [],
 				show: false,
@@ -147,21 +148,42 @@
 			readysuccess:async function(res) {
 				console.log(res);
 				},
-			choosesuccess: async function(res) {
-				let img = await this.$api.goUpload({
+			choosesuccess:  function(res) {
+				var that=this;
+				  this.$api.goUpload({
 					filePath: res.url
-				});
-				if (!img.code) {
-					this.$u.toast(res.msg);
-				};
-				if (this.imgList.length != 0) {
-					this.imgList = this.imgList.concat([img.data.fullurl])
-				} else {
-					this.imgList = [img.data.fullurl]
-				}
-				this.show = false;
+				}).then(res => {
+					debugger
+					if (!res.code) {
+						that.$u.toast(res.msg);
+					};
+					if (that.imgList.length != 0) {
+						that.imgList = that.imgList.concat([res.data.fullurl])
+					} else {
+						that.imgList = [res.data.fullurl]
+					}
+						that.show = false;
+				})
+				
+				// .then(res){
+				// 	// debugger
+				// 	// if (!img.code) {
+				// 	// 	this.$u.toast(res.msg);
+				// 	// };
+				// 	// if (this.imgList.length != 0) {
+				// 	// 	this.imgList = this.imgList.concat([img.data.fullurl])
+				// 	// } else {
+				// 	// 	this.imgList = [img.data.fullurl]
+				// 	// }
+				// 	// 	this.show = false;
+				// }
+			
 			},
 			ChooseImage() {
+				
+			
+				
+				
 				this.show = true;
 				// this.$u.route({
 				// 	// 关于此路径，请见下方"注意事项"
