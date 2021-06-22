@@ -13,10 +13,10 @@ const upload = async function(vm, {
 		formData
 	}) {
 	return new Promise((resolve, reject) => {
-		uni.showLoading({
-			mask: true,
-			title: '上传中'
-		});
+		// uni.showLoading({
+		// 	mask: true,
+		// 	title: '上传中'
+		// });
 		let data = {
 			url: vm.vuex_config.config.upload.uploadurl,			
 			header: {
@@ -25,7 +25,7 @@ const upload = async function(vm, {
 			},
 			name: 'file',
 			complete: function() {
-				uni.hideLoading();
+				// uni.hideLoading();
 			},
 			success: uploadFileRes => {
 				try {

@@ -37,8 +37,8 @@
 				</view>
 			</view>
 		</view>
-		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false" :width="form.newbili[0]*1"
-			:heght="form.newbili[1]*1" :is-lock-width="true" />
+		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false"
+			:width="form.newbili[0]*1" :height="form.newbili[1]*1":max-width="5000" :max-height="5000" :min-ratio="0" :is-disable-scale="true"/>
 
 		<!-- 	<view >
 			<view style="display: flex;justify-content: space-between;margin: 10px 0px;">
@@ -52,7 +52,8 @@
 
 		</view> -->
 
-		<u-button style="margin: 15px;"  v-if="form.shenhestatus==1||form.shenhestatus==''||form.shenhestatus==0" type="primary" @click="submit">提交</u-button>
+		<u-button style="margin: 15px;" v-if="form.shenhestatus==1||form.shenhestatus==''||form.shenhestatus==0"
+			type="primary" @click="submit">提交</u-button>
 	</u-form>
 </template>
 
@@ -76,7 +77,7 @@
 					nums: 12,
 					yaoqiu: '150kb',
 					bili: '2500*2600',
-					shenhestatus:''
+					shenhestatus: ''
 				},
 				imgList: [],
 				show: false,
@@ -93,16 +94,15 @@
 		},
 		methods: {
 			submit() {
-				if(this.imgList.length!=this.form.nums)
-				{
+				if (this.imgList.length != this.form.nums) {
 					this.$u.toast("图片请上传完整");
 					return fasel;
-					
+
 				}
-				
-				
+
+
 				this.postform.imglist = this.imgList;
-				var orderid=this.postform.orderid;
+				var orderid = this.postform.orderid;
 				this.$api.PostTikOrder(this.postform).then(res => {
 					this.$u.toast(res.msg);
 					if (res.code) {
@@ -119,8 +119,8 @@
 
 			},
 			getDetail: async function() {
-				
-					var orderid=this.postform.orderid;
+
+				var orderid = this.postform.orderid;
 				let res = await this.$api.getGuigei({
 					guige: this.postform.chichu,
 					shop_order_id: this.postform.orderid
@@ -128,43 +128,61 @@
 				console.log(res);
 				if (!res.code) {
 					this.$u.toast(res.msg);
-				setTimeout(() => {
-					this.$Router.replace({
-						path: `/pages/upload/upload`,
-						query: {
-							orderid: orderid
-						}
-					});
-				}, 1500);
+					setTimeout(() => {
+						this.$Router.replace({
+							path: `/pages/upload/upload`,
+							query: {
+								orderid: orderid
+							}
+						});
+					}, 1500);
 					return;
 				} else {
 					this.form = res.data
-					if(res.data.imglist!="")
-					{
-						this.imgList=res.data.imglist;
+					if (res.data.imglist != "") {
+						this.imgList = res.data.imglist;
 					}
 				}
 			},
-			readysuccess:async function(res) {
+			readysuccess: async function(res) {
 				console.log(res);
-				},
-			choosesuccess:  function(res) {
-				var that=this;
-				  this.$api.goUpload({
-					filePath: res.url
-				}).then(res => {
-					debugger
-					if (!res.code) {
-						that.$u.toast(res.msg);
-					};
-					if (that.imgList.length != 0) {
-						that.imgList = that.imgList.concat([res.data.fullurl])
-					} else {
-						that.imgList = [res.data.fullurl]
-					}
+			},
+			choosesuccess: function(res) {
+				var that = this;
+				var formData = [];
+				formData.token =that.vuex_token;
+				wx.uploadFile({
+					url: "https://photo.yaohua1314.cn/api/common/upload",
+					filePath: res.url,
+					name: 'file',
+						formData: formData,
+					success: function(res) {
+						var data = JSON.parse(res.data);
+						if (!res.code) {
+							that.$u.toast(res.msg);
+						};
+						if (that.imgList.length != 0) {
+							that.imgList = that.imgList.concat([data.data.fullurl])
+						} else {
+							that.imgList = [data.data.fullurl]
+						}
 						that.show = false;
-				})
+					},
+					error: function(res) {
+						app.error("上传头像失败!");
+					}
+				});
 				
+				// this.$api.goUpload({
+				// 	filePath: res.url
+				// }).then(res => {
+				// 	this.onSuccess(res)
+				// }).catch(function(error) {
+				// 	// 处理 getJSON 和 前一个回调函数运行时发生的错误
+				// 	console.log('发生错误！', error);
+				// 	debugger
+				// });
+
 				// .then(res){
 				// 	// debugger
 				// 	// if (!img.code) {
@@ -177,13 +195,27 @@
 				// 	// }
 				// 	// 	this.show = false;
 				// }
-			
+
 			},
+
+			onSuccess(res) {
+				var that = this;
+				if (!res.code) {
+					that.$u.toast(res.msg);
+				};
+				if (that.imgList.length != 0) {
+					that.imgList = that.imgList.concat([res.data.fullurl])
+				} else {
+					that.imgList = [res.data.fullurl]
+				}
+				that.show = false;
+			},
+
 			ChooseImage() {
-				
-			
-				
-				
+
+
+
+
 				this.show = true;
 				// this.$u.route({
 				// 	// 关于此路径，请见下方"注意事项"
