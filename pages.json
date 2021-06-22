@@ -517,6 +517,24 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
+        ,{
+            "path" : "pages/teach/teach",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/desc/desc",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	// #ifdef APP-PLUS
 	"tabBar": {

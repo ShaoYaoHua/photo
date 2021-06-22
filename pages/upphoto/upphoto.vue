@@ -38,7 +38,7 @@
 			</view>
 		</view>
 		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false"
-			:width="form.newbili[0]*1" :height="form.newbili[1]*1":max-width="5000" :max-height="5000" :min-ratio="0" :is-disable-scale="true"/>
+			:width="form.newbili[0]*1" :height="form.newbili[1]*1" :min-ratio="0" :is-disable-scale="true"/>
 
 		<!-- 	<view >
 			<view style="display: flex;justify-content: space-between;margin: 10px 0px;">
@@ -52,7 +52,7 @@
 
 		</view> -->
 
-		<u-button style="margin: 15px;" v-if="form.shenhestatus==1||form.shenhestatus==''||form.shenhestatus==0"
+		<u-button style="margin: 15px;" v-if="form.shenhestatus==1||form.shenhestatus==null||form.shenhestatus==0"
 			type="primary" @click="submit">提交</u-button>
 	</u-form>
 </template>
