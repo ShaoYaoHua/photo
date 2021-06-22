@@ -39,6 +39,14 @@
 					this.$u.toast(res.msg);
 					return;
 				}else{
+				
+					if(res.data.mainstatus==1)
+					{
+						this.$u.toast("该订单已关闭");
+						return;
+						
+					}
+					
 					this.form=res.data
 				}
 			}
@@ -65,6 +73,14 @@
 					this.$u.toast(res.msg);
 					return;
 				}else{
+				
+					if(res.data.mainstatus==1)
+					{
+						this.$u.toast("该订单已关闭");
+						return;
+						
+					}
+					
 					this.form=res.data
 				}
 				
