@@ -14,7 +14,7 @@
 			<u-input placeholder="请输入订单编号自动获取" :disabled="true" v-model="form.post_tel" />
 		</u-form-item>
 
-		<view style="margin: 0px 20px;10px;20px">填写订单编号后，点击获取，自动加载订单信息哦,注：付款后5分钟才可以点击获取</view>
+		<view style="margin: 0px 20px;10px;20px">填写订单编号后，点击获取，自动加载订单信息哦,注：付款后2-3分钟才可以点击获取</view>
 
 
 		<view @click="goTeach()" class="weui-cells__tips"
@@ -55,6 +55,7 @@
 			let query = this.$Route.query || e || {};
 			this.mainorderid = query.orderid || 0;
 			if (this.mainorderid != 0) {
+				
 				let res = await this.$api.getTikOrder({
 					orderid: this.mainorderid
 				});

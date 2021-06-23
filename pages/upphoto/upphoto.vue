@@ -38,7 +38,7 @@
 			</view>
 		</view>
 		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false"
-			:width="form.newbili[0]*1" :height="form.newbili[1]*1" :min-ratio="0" :is-disable-scale="true"/>
+			:width="form.newbili[0]*1" :height="form.newbili[1]*1" :min-width="form.newbili[0]*1":min-height="form.newbili[1]*1" :max-height="form.newbili[1]*1" :max-width="form.newbili[0]*1"  :min-ratio="0" :is-disable-scale="true"/>
 
 		<!-- 	<view >
 			<view style="display: flex;justify-content: space-between;margin: 10px 0px;">

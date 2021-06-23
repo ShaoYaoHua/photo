@@ -1,5 +1,6 @@
 //免登录接口
 let noLoginUrl = [
+	'/addons/cms/api.common/init',
 	'/addons/cms/api.ems/send',
 	'/addons/cms/api.sms/send',
 	'/addons/cms/api.archives/index',
