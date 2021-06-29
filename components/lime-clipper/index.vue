@@ -584,11 +584,8 @@ export default {
 			const itemList = [
 				'从相册中选择', 
 				'拍照'
-				// #ifdef MP-WEIXIN
-				,'从微信中选择',
-				// #endif
 				]
-			const sizeType = ['original', 'compressed']
+			const sizeType = ['original']
 			const source = ['album', 'camera']  
 			const success = ({tempFilePaths:a, tempFiles: b}) => {
 			

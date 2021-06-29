@@ -23,9 +23,9 @@
 
 		<view style="padding: 0px 20px;font-size: 14px; color: #c8c9cc;" v-if="form.sku_spec.length>1"> 需上传图片</view>
 		<view style="display: flex;flex-wrap: wrap;text-align: center;   ">
-			<view v-if="item.name=='尺寸'" :class="item.ishaving==0 ?'mz-red':'mz-green'" class="mainlist"
-				v-for="(item, index) in form.sku_spec" @click="gophoto(item.value)">
-				<view style="width: 80%;">{{item.value}}</view>
+			<view  :class="item.ishaving==0 ?'mz-red':'mz-green'" class="mainlist"
+				v-for="(item, index) in form.sku_spec" @click="gophoto(item.title)">
+				<view style="width: 80%;">{{item.title}}</view>
 				<view >{{item.ishaving==0 ?'待上传':'已上传'}} </view>
 			</view>
 
@@ -33,8 +33,8 @@
 
 
 
-		<view style="padding: 0px 20px;font-size: 14px; color: #c8c9cc;" v-if="form.sku_spec.length>1"> 需上传内容</view>
-		<view v-if="form.sku_spec.length>1" style="display: flex;flex-wrap: wrap;text-align: center;   ">
+		<view style="padding: 0px 20px;font-size: 14px; color: #c8c9cc;" v-if="form.newstatus=='normal'"> 需上传内容</view>
+		<view v-if="form.newstatus=='normal'" style="display: flex;flex-wrap: wrap;text-align: center;   ">
 			<view  :class="form.desc==null ||form.desc=='' ?'mz-red':'mz-green'" class="mainlist"  @click="godesc">
 				<view style="width: 80%;">需上传内容</view>
 				<view >{{form.desc==null ||form.desc=="" ?'待上传':'已上传'}} </view>

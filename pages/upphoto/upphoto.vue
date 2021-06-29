@@ -166,6 +166,18 @@
 						} else {
 							that.imgList = [data.data.fullurl]
 						}
+						uni.showModal({
+						    title: '部分上传成功',
+						    content: '当前尺寸的照片上传成功，请务必回到首页确认所有尺寸照片都上传完成!',
+							showCancel:false,
+						    success: function (res) {
+						        if (res.confirm) {
+						            console.log('用户点击确定');
+						        } else if (res.cancel) {
+						            console.log('用户点击取消');
+						        }
+						    }
+						});
 						that.show = false;
 					},
 					error: function(res) {
