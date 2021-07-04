@@ -195,8 +195,8 @@ export default {
 		imageStyle() {
 			const {imageWidth, imageHeight, imageLeft, imageTop, cutAnimation, scale, angle} = this
 			return `
-				width:${imageWidth ? imageWidth + 'px' : 'auto'}; 
-				height: ${imageHeight ? imageHeight + 'px' : 'auto'}; 
+				width:${imageWidth ? imageWidth*2 + 'px' : 'auto'}; 
+				height: ${imageHeight ? imageHeight*2 + 'px' : 'auto'}; 
 				transform: translate3d(${imageLeft - imageWidth / 2}px, ${imageTop - imageHeight / 2}px, 0) scale(${scale}) rotate(${angle}deg); 
 				transition-duration: ${cutAnimation ? 0.35 : 0}s
 			`
@@ -663,11 +663,11 @@ export default {
 			});
 			const { canvasHeight, canvasWidth, clipHeight, clipWidth, ctx, scale, imageLeft, imageTop, cutX, cutY, angle, scaleRatio: dpr, image, quality, type: imageType } = this;
 			const draw = () => {
-				const imageWidth = this.imageWidth * scale * dpr;
-				const imageHeight = this.imageHeight * scale * dpr;
+				const imageWidth = this.imageWidth * scale * dpr*2;
+				const imageHeight = this.imageHeight * scale * dpr*2;
 				const xpos = imageLeft - cutX;
 				const ypos = imageTop - cutY;
-				ctx.translate(xpos * dpr, ypos * dpr);
+				ctx.translate(xpos * dpr/2, ypos * dpr/2);
 				ctx.rotate((angle * Math.PI) / 180);
 				ctx.drawImage(image, -imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight);
 				ctx.draw(false, () => {
@@ -685,6 +685,8 @@ export default {
 						quality,
 						success: (res) => {
 							data.url = res.tempFilePath;
+                            // console.log(res.tempFilePath);
+                            // return;
 							uni.hideLoading();
 							this.$emit('success', data);
 						},
