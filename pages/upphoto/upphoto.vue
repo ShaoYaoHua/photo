@@ -38,7 +38,7 @@
 			</view>
 		</view>
 		<l-clipper v-if="show" @success="choosesuccess" @ready="readysuccess" @cancel="show = false"
-			:width="form.newbili[0]*1" :height="form.newbili[1]*1" :min-width="form.newbili[0]*1":min-height="form.newbili[1]*1" :max-height="form.newbili[1]*1" :max-width="form.newbili[0]*1"  :min-ratio="0" />
+			:width="form.newbili[0]*1" :maxsize="form.yaoqiu" :height="form.newbili[1]*1" :min-width="form.newbili[0]*1":min-height="form.newbili[1]*1" :max-height="form.newbili[1]*1" :max-width="form.newbili[0]*1"  :min-ratio="0" />
 
 		<!-- 	<view >
 			<view style="display: flex;justify-content: space-between;margin: 10px 0px;">
@@ -146,6 +146,18 @@
 			},
 			readysuccess: async function(res) {
 				console.log(res);
+				
+				if(parseInt(this.form.yaoqiu)> res.size)
+				{
+					uni.showToast({
+						title: "上传图片不能小于" +this.form.yaoqiu + "!",
+						icon: 'none'
+					});
+					this.show=false;
+					return;
+					
+				}
+				
 			},
 			choosesuccess: function(res) {
 				var that = this;
