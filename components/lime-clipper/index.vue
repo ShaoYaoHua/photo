@@ -1,12 +1,68 @@
 <template>
 	<view class="l-clipper" :class="{open: value}" disable-scroll :style="'z-index: ' + zIndex + ';' + customStyle">
-					<view v-else class="cancel">取消</view>
-					<image v-else :src="photoImg" />
-					<image v-else :src="rotateImg" data-type="inverse" />
-					<view v-else class="confirm">确定</view>
+		<radio-group class="radioGroup text-white" @change="changeType($event)">
+		    <label v-for="(item,index) in rectTyle">
+		        <radio :value="item.id" :checked="item.checked" />
+                <text v-text="item.name"></text>
+		    </label>
+		</radio-group>
+        <view class="l-clipper-mask" 
+			@touchstart.stop.prevent="clipTouchStart" 
+			@touchmove.stop.prevent="clipTouchMove" 
+			@touchend.stop.prevent="clipTouchEnd">
+			<view class="l-clipper__content" :style="clipStyle"><view class="l-clipper__edge" v-for="(item, index) in [0, 0, 0, 0]" :key="index"></view></view>
 		</view>
+		<image
+			class="l-clipper-image"
+			@error="imageLoad"
+			@load="imageLoad"
+			@touchstart="imageTouchStart"
+			@touchmove="imageTouchMove"
+			@touchend="imageTouchEnd"
+			:src="image"
+			:mode="imageWidth == 'auto' ? 'widthFix' : 'scaleToFill'"
+			v-if="image"
+			:style="imageStyle"
+		/>
+		<canvas
+			:canvas-id="canvasId"
+			id="l-clipper"
+			disable-scroll
+			:style="'width: ' + canvasWidth * scaleRatio + 'px; height:' + canvasHeight * scaleRatio + 'px;'"
+			class="l-clipper-canvas"
+		></canvas>
+		<view class="l-clipper-tools">
+			<view class="l-clipper-tools__btns">
+				<view v-if="isShowCancelBtn" @tap="cancel">
+					<slot name="cancel" v-if="$slots.cancel" />
+					<view v-else class="cancel">取消</view>
+				</view>
+				<view v-if="isShowPhotoBtn" @tap="uploadImage">
+					<slot name="photo" v-if="$slots.photo" />
+					<image v-else :src="photoImg" />
+				</view>
+				<view v-if="isShowRotateBtn" @tap="rotate">
+					<slot name="rotate" v-if="$slots.rotate" />
+					<image v-else :src="rotateImg" data-type="inverse" />
+				</view>
+				<view v-if="isShowConfirmBtn" @tap="confirm" >
+					<slot name="confirm" v-if="$slots.confirm" />
+					<view v-else class="confirm">确定</view>
+				</view>
+			</view>
+			<slot></slot>
+		</view>
+	</view>
+</template>
+
 <script>
+import rotateImg from './images/rotate.svg'
+import photoImg from './images/photo.svg'
+import { pathToBase64, determineDirection, calcImageOffset, calcImageScale, calcImageSize, calcPythagoreanTheorem, clipTouchMoveOfCalculate, imageTouchMoveOfCalcOffset } from './utils';
 const cache = {}
+export default {
+	// version: '0.6.3',
+	name: 'l-clipper',
 	props: {
 		value: {
 			type: Boolean,
@@ -80,9 +136,6 @@ const cache = {}
 			type: Number,
 			default: 5
 		},
-		maxsize: {
-			type: String,
-		},
 		minRatio: {
 			type: Number,
 			default: 0.5
@@ -149,7 +202,6 @@ const cache = {}
 			imageHeight: 0,
 			imageTop: 0,
 			imageLeft: 0,
-			maxsize:"",
 			upsize:0,
 			scale: 1,
 			angle: 0,
@@ -349,7 +401,6 @@ const cache = {}
 			uni.getImageInfo({
 				src: url,
 				success: res => {
-					
 					this.imgComputeSize(res.width, res.height);
 					this.image = res.path;
 					if (this.isLimitMove) {
@@ -664,7 +715,7 @@ const cache = {}
 			})
 			this.moveStop();
 		},
-		uploadImage() {
+	uploadImage() {
 			const itemList = Object.entries(this.source)
 			const sizeType = ['original']
 			const success = ({tempFilePaths:a, tempFiles: b}) => {
@@ -723,7 +774,6 @@ const cache = {}
 		imageLoad(e) {
 			this.imageReset();
 			uni.hideLoading();
-			e.detail['size']=this.upsize;
 			this.$emit('ready', e.detail);
 		},
 		rotate(event) {
