@@ -825,6 +825,10 @@ const cache = {}
 @import './index'
 .radioGroup{
     margin:30rpx 35rpx;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
 }
 .radioGroup label{
     margin-right:30rpx;
