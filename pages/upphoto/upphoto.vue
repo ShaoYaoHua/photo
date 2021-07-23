@@ -72,6 +72,7 @@
 		},
 		data() {
 			return {
+				upstate:true,
 				form: {
 					chi: '莫妮白色',
 					nums: 12,
@@ -160,6 +161,16 @@
 				
 			},
 			choosesuccess: function(res) {
+				
+		
+					if(!this.upstate)
+					{
+						return false;
+					}
+				this.upstate=false;
+				uni.showLoading({
+				    	title:"上传中..."
+					})
 				var that = this;
 				var formData = [];
 				formData.token =that.vuex_token;
@@ -169,6 +180,7 @@
 					name: 'file',
 						formData: formData,
 					success: function(res) {
+					
 						var data = JSON.parse(res.data);
 						if (!res.code) {
 							that.$u.toast(res.msg);
@@ -178,11 +190,13 @@
 						} else {
 							that.imgList = [data.data.fullurl]
 						}
+						    uni.hideLoading();
 						uni.showModal({
 						    title: '部分上传成功',
 						    content: '当前尺寸的照片上传成功，请务必回到首页确认所有尺寸照片都上传完成!',
 							showCancel:false,
 						    success: function (res) {
+									that.upstate=true;
 						        if (res.confirm) {
 						            console.log('用户点击确定');
 						        } else if (res.cancel) {
