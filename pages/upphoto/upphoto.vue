@@ -175,7 +175,7 @@
 				var formData = [];
 				formData.token =that.vuex_token;
 				wx.uploadFile({
-					url: "https://photo.yaohua1314.cn/api/common/upload",
+					url: "https://www.jiangyuan666.xyz/api/common/upload",
 					filePath: res.url,
 					name: 'file',
 						formData: formData,
