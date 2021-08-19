@@ -20,7 +20,9 @@
 		<view @click="goTeach()" class="weui-cells__tips"
 			style="text-decoration:underline;color:black;font-weight: 600;margin: 10px 20px;10px;20px ">
 			不会使用？点我查看教程</view>
-
+<view v-if="vuex_config.config.picture!=''" style="text-align: center;
+    width: 100%;
+    margin: 10px;"> <image style=" width: 200px;height: 200px;" :src="vuex_config.config.upload.cdnurl+'/'+vuex_config.config.picture"></image></view>
 		<view style="padding: 0px 20px;font-size: 14px; color: #c8c9cc;" v-if="form.sku_spec.length>1"> 需上传图片</view>
 		<view style="display: flex;flex-wrap: wrap;text-align: center;   ">
 			<view  :class="item.ishaving==0 ?'mz-red':'mz-green'" class="mainlist"
