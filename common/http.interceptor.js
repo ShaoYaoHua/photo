@@ -29,6 +29,7 @@ let noLoginUrl = [
 	'/addons/cms/api.my/tikorder',
 	'/addons/cms/api.my/guige',
 	'/addons/cms/api.my/posttikOrder',
+	'/addons/cms/api.my/updateorder',
 ];
 
 //设置session_id
