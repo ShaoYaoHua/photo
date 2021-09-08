@@ -21,9 +21,10 @@
 			style="text-decoration:underline;color:black;font-weight: 600;margin: 10px 20px;10px;20px ">
 			不会使用？点我查看教程</view>
 			
-<view v-if="form.picstatus=='normal'" style="text-align: center;
-    width: 100%;
-    margin: 10px;"> <image style=" width: 200px;height: 200px;" :src="vuex_config.config.upload.cdnurl+'/'+vuex_config.config.picture"></image></view>
+<view v-if="form.picstatus=='normal'" style="text-align: center;width: 100%;margin: 10px;"> <image style=" width: 200px;height: 200px;" :src="vuex_config.config.upload.cdnurl+'/'+vuex_config.config.picture"></image>
+</view>
+	
+	
 		<view style="padding: 0px 20px;font-size: 14px; color: #c8c9cc;" v-if="form.sku_spec.length>1"> 需上传图片</view>
 		<view style="display: flex;flex-wrap: wrap;text-align: center;   ">
 			<view  :class="item.ishaving==0 ?'mz-red':'mz-green'" class="mainlist"
@@ -32,7 +33,7 @@
 				<view >{{item.ishaving==0 ?'待上传':'已上传'}} </view>
 			</view>
 
-		</view>
+</view>
 
 
 
@@ -66,18 +67,13 @@
 					this.$u.toast(res.msg);
 					return;
 				} else {
-
 					if (res.data.mainstatus == 1) {
 						this.$u.toast("该订单已关闭");
 						return;
-
 					}
-
 					this.form = res.data
 				}
 			}
-
-
 		},
 		data() {
 			return {
@@ -85,9 +81,9 @@
 				form: {
 					shop_order_id: '',
 					intro: '',
-					sex: ''
+					sex: '',
+					picstatus:"",
 				},
-
 			};
 		},
 		methods: {
@@ -101,16 +97,12 @@
 					this.$u.toast(res.msg);
 					return;
 				} else {
-
 					if (res.data.mainstatus == 1) {
 						this.$u.toast("该订单已关闭");
 						return;
-
 					}
-
 					this.form = res.data
 				}
-
 			},
 			goTeach() {
 				debugger
@@ -120,10 +112,7 @@
 						chichu: 1
 					}
 				});
-
 			},
-
-
 			gophoto(id) {
 				var orderid = this.form.shop_order_id;
 				this.$Router.push({
@@ -150,40 +139,32 @@
 	page {
 		background-color: #FFFFFF;
 	}
-
 	.u-form-item {
 		margin: 0 20px;
 		padding: 4px 0px !important;
 	}
-
 	@-webkit-keyframes a-red {
 		from {
 			background-color: #fff;
 		}
-
 		to {
 			background-color: #ffc8c8;
 		}
 	}
-
 	@keyframes a-red {
 		from {
 			background-color: #fff;
 		}
-
 		to {
 			background-color: #ffc8c8;
 		}
 	}
-
 	.mz-red {
 		animation: a-red .7s cubic-bezier(.7, .5, .3, .1) 0s infinite alternate;
 	}
-
 	.mz-green {
 		background-color: #c6ffc6;
 	}
-
 	.mainlist {
 		width: 99%;
 		margin: 10px 0px;
